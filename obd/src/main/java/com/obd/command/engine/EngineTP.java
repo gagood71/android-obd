@@ -2,11 +2,10 @@ package com.obd.command.engine;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.core.configuration.Configuration;
-import com.core.utils.LogUtil;
 import com.github.eltonvs.obd.command.ObdResponse;
 import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
@@ -16,6 +15,7 @@ import com.obd.command.CommandListener;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
+
 public class EngineTP extends Command<ThrottlePositionCommand> {
     public EngineTP(CommandListener listener) {
         super(listener);
@@ -23,7 +23,8 @@ public class EngineTP extends Command<ThrottlePositionCommand> {
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
-        return () -> {};
+        return () -> {
+        };
     }
 
     @Override
@@ -31,7 +32,7 @@ public class EngineTP extends Command<ThrottlePositionCommand> {
         return () -> connection.run(
                 obdCommand,
                 USE_CACHE,
-                Configuration.Time.TIME_0,
+                0,
                 MAX_RETRIES,
                 getContinuation(listener)
         );
@@ -41,6 +42,7 @@ public class EngineTP extends Command<ThrottlePositionCommand> {
     protected ThrottlePositionCommand getCommand() {
         return new ThrottlePositionCommand();
     }
+
     @Override
     protected Continuation<ObdResponse> getContinuation(CommandListener listener) {
         return new Continuation<ObdResponse>() {
@@ -52,7 +54,7 @@ public class EngineTP extends Command<ThrottlePositionCommand> {
 
             @Override
             public void resumeWith(@NonNull Object o) {
-                LogUtil.e(getClass().getName(), o.toString());
+                Log.e(getClass().getName(), o.toString());
 
                 if (o instanceof ObdResponse) {
                     ObdResponse obdResponse = (ObdResponse) o;

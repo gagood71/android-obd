@@ -2,11 +2,10 @@ package com.obd.command.trouble;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.core.configuration.Configuration;
-import com.core.utils.LogUtil;
 import com.github.eltonvs.obd.command.ObdResponse;
 import com.github.eltonvs.obd.command.control.ResetTroubleCodesCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
@@ -24,7 +23,8 @@ public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
-        return () -> {};
+        return () -> {
+        };
     }
 
     @Override
@@ -33,7 +33,7 @@ public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
         return () -> connection.run(
                 obdCommand,
                 USE_CACHE,
-                Configuration.Time.TIME_0,
+                0,
                 MAX_RETRIES,
                 getContinuation(listener)
         );
@@ -55,7 +55,7 @@ public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
 
             @Override
             public void resumeWith(@NonNull Object o) {
-                LogUtil.e(getClass().getName(), o.toString());
+                Log.e(getClass().getName(), o.toString());
 
                 if (o instanceof ObdResponse) {
                     ObdResponse obdResponse = (ObdResponse) o;

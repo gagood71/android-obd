@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- OBD 用詞 -->
-    <string name="OBD_提醒">請確認已開啟藍芽。 \n請連接含有 OBD 字樣的藍芽設備。</string>
-    <string name="OBD_診斷">診斷</string>
-    <string name="OBD_數據">數據</string>
-    <string name="OBD_錯誤代碼">錯誤代碼</string>
-    <string name="OBD_錯誤代碼說明">以下是找到的錯誤代碼，您可以使用下方的清除按鈕來消除這個錯誤。</string>
-    <string name="OBD_錯誤代碼消除">錯誤代碼消除</string>
-    <string name="OBD_錯誤代碼消除成功">錯誤代碼消除成功</string>
-    <string name="OBD_錯誤代碼消除失敗">錯誤代碼消除失敗</string>
-    <string name="OBD_汽車狀態">汽車狀態</string>
-
-    <!-- OBD 引擎用詞 -->
+    <string name="提醒">請確認已開啟藍芽。</string>
+    <string name="診斷">診斷</string>
+    <string name="數據">數據</string>
+    <string name="錯誤代碼">錯誤代碼</string>
+    <string name="錯誤代碼說明">以下是找到的錯誤代碼，您可以使用下方的清除按鈕來消除這個錯誤。</string>
+    <string name="錯誤代碼消除">錯誤代碼消除</string>
+    <string name="錯誤代碼消除成功">錯誤代碼消除成功</string>
+    <string name="錯誤代碼消除失敗">錯誤代碼消除失敗</string>
+    <string name="汽車狀態">汽車狀態</string>
     <string name="引擎">引擎</string>
     <string name="引擎狀態">引擎狀態</string>
-    <string name="引擎_附載">引擎附載</string>
-    <string name="引擎_附載絕對值">引擎附載</string>
-    <string name="引擎_空氣流量計">空氣流量</string>
-    <string name="引擎_轉速">引擎轉速</string>
-    <string name="引擎_車輛時速">車輛時速</string>
-    <string name="引擎_油門位置">油門位置</string>
-    <string name="引擎_相對油門位置">相對油門位置</string>
-
-    <!-- OBD 溫度用詞 -->
+    <string name="引擎附載">引擎附載</string>
+    <string name="空氣流量">空氣流量</string>
+    <string name="引擎轉速">引擎轉速</string>
+    <string name="車輛時速">車輛時速</string>
+    <string name="油門位置">油門位置</string>
+    <string name="相對油門位置">相對油門位置</string>
     <string name="溫度">溫度</string>
     <string name="溫度狀態">溫度狀態</string>
-    <string name="溫度_車內溫度">車內溫度</string>
-    <string name="溫度_進氣溫度">進氣溫度</string>
-    <string name="溫度_冷卻溫度">冷卻溫度</string>
-    <string name="溫度_機油溫度">機油溫度</string>
-
-    <!-- OBD 機油用詞 -->
+    <string name="車內溫度">車內溫度</string>
+    <string name="進氣溫度">進氣溫度</string>
+    <string name="冷卻溫度">冷卻溫度</string>
+    <string name="機油溫度">機油溫度</string>
     <string name="機油">機油</string>
-    <string name="機油_油位">機油油位</string>
+    <string name="機油油位">機油油位</string>
 </resources>

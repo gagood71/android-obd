@@ -2,11 +2,10 @@ package com.obd.command.engine;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.core.configuration.Configuration;
-import com.core.utils.LogUtil;
 import com.github.eltonvs.obd.command.ObdResponse;
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
@@ -24,7 +23,8 @@ public class EngineAL extends Command<AbsoluteLoadCommand> {
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
-        return () -> {};
+        return () -> {
+        };
     }
 
     @Override
@@ -33,11 +33,12 @@ public class EngineAL extends Command<AbsoluteLoadCommand> {
         return () -> connection.run(
                 obdCommand,
                 USE_CACHE,
-                Configuration.Time.TIME_0,
+                0,
                 MAX_RETRIES,
                 getContinuation(listener)
         );
     }
+
     @Override
     protected AbsoluteLoadCommand getCommand() {
         return new AbsoluteLoadCommand();
@@ -54,7 +55,7 @@ public class EngineAL extends Command<AbsoluteLoadCommand> {
 
             @Override
             public void resumeWith(@NonNull Object o) {
-                LogUtil.e(getClass().getName(), o.toString());
+                Log.e(getClass().getName(), o.toString());
 
                 if (o instanceof ObdResponse) {
                     ObdResponse obdResponse = (ObdResponse) o;
