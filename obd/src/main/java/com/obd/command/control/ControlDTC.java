@@ -1,4 +1,4 @@
-package com.obd.command.trouble;
+package com.obd.command.control;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.control.PendingTroubleCodesCommand;
+import com.github.eltonvs.obd.command.control.DTCNumberCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
@@ -16,20 +16,18 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 
-public class TroublePTC extends Command<PendingTroubleCodesCommand> {
-    public TroublePTC(CommandListener listener) {
-        super(listener);
+public class ControlDTC extends Command<DTCNumberCommand> {
+    public ControlDTC(CommandListener listener) {
+        super(ELTONVS, listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
-        return () -> {
-        };
+        return () -> {};
     }
 
     @Override
-    protected Runnable getRunnable(ObdDeviceConnection connection,
-                                   CommandListener listener) {
+    protected Runnable getRunnable(ObdDeviceConnection connection, CommandListener listener) {
         return () -> connection.run(
                 obdCommand,
                 USE_CACHE,
@@ -40,8 +38,8 @@ public class TroublePTC extends Command<PendingTroubleCodesCommand> {
     }
 
     @Override
-    protected PendingTroubleCodesCommand getCommand() {
-        return new PendingTroubleCodesCommand();
+    protected DTCNumberCommand getCommand() {
+        return new DTCNumberCommand();
     }
 
     @Override
@@ -60,21 +58,12 @@ public class TroublePTC extends Command<PendingTroubleCodesCommand> {
                 if (o instanceof ObdResponse) {
                     ObdResponse obdResponse = (ObdResponse) o;
 
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        String value = obdCommand.getTroubleCodesList().toString();
-
-                        if (value.equals("") || value.equals("[]")) {
-                            return;
-                        }
-
-                        value = value.replace("[", "");
-                        value = value.replace("]", "");
-
-                        listener.onSuccess(
-                                value,
-                                obdResponse.getUnit()
-                        );
-                    });
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            listener.onSuccess(
+                                    obdResponse.getRawResponse().getValue(),
+                                    obdResponse.getUnit()
+                            )
+                    );
                 } else {
                     new Handler(Looper.getMainLooper()).post(() ->
                             listener.onFailed(
@@ -89,6 +78,6 @@ public class TroublePTC extends Command<PendingTroubleCodesCommand> {
 
     @Override
     protected String getUnit() {
-        return "";
+        return "codes";
     }
 }

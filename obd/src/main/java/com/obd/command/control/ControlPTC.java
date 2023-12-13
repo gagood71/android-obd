@@ -1,4 +1,4 @@
-package com.obd.command.trouble;
+package com.obd.command.control;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.control.ResetTroubleCodesCommand;
+import com.github.eltonvs.obd.command.control.PendingTroubleCodesCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
@@ -16,8 +16,8 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 
-public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
-    public TroubleRTC(CommandListener listener) {
+public class ControlPTC extends Command<PendingTroubleCodesCommand> {
+    public ControlPTC(CommandListener listener) {
         super(listener);
     }
 
@@ -40,8 +40,8 @@ public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
     }
 
     @Override
-    protected ResetTroubleCodesCommand getCommand() {
-        return new ResetTroubleCodesCommand();
+    protected PendingTroubleCodesCommand getCommand() {
+        return new PendingTroubleCodesCommand();
     }
 
     @Override
@@ -60,12 +60,21 @@ public class TroubleRTC extends Command<ResetTroubleCodesCommand> {
                 if (o instanceof ObdResponse) {
                     ObdResponse obdResponse = (ObdResponse) o;
 
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onSuccess(
-                                    obdResponse.getRawResponse().getValue(),
-                                    obdResponse.getUnit()
-                            )
-                    );
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        String value = obdCommand.getTroubleCodesList().toString();
+
+                        if (value.equals("") || value.equals("[]")) {
+                            return;
+                        }
+
+                        value = value.replace("[", "");
+                        value = value.replace("]", "");
+
+                        listener.onSuccess(
+                                value,
+                                obdResponse.getUnit()
+                        );
+                    });
                 } else {
                     new Handler(Looper.getMainLooper()).post(() ->
                             listener.onFailed(
