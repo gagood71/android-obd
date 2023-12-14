@@ -2,6 +2,7 @@ package com.obd;
 
 public class Configuration {
     public static final class String {
+        public static final int ECU_狀態 = R.string.ECU_狀態;
         public static final int 車輛狀態 = R.string.車輛狀態;
         public static final int 異常狀態 = R.string.異常狀態;
         public static final int 故障代碼 = R.string.故障代碼;

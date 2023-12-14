@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ECU_狀態">ECU 狀態</string>
     <string name="車輛狀態">車輛狀態</string>
     <string name="異常狀態">異常狀態</string>
 

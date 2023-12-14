@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.control.DTCNumberCommand;
+import com.github.eltonvs.obd.command.control.VINCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
@@ -16,8 +16,8 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 
-public class ControlDTC extends Command<DTCNumberCommand> {
-    public ControlDTC(CommandListener listener) {
+public class ControlVIN extends Command<VINCommand> {
+    public ControlVIN(CommandListener listener) {
         super(ELTONVS, listener);
     }
 
@@ -39,8 +39,8 @@ public class ControlDTC extends Command<DTCNumberCommand> {
     }
 
     @Override
-    protected DTCNumberCommand getCommand() {
-        return new DTCNumberCommand();
+    protected VINCommand getCommand() {
+        return new VINCommand();
     }
 
     @Override
@@ -79,6 +79,6 @@ public class ControlDTC extends Command<DTCNumberCommand> {
 
     @Override
     protected String getUnit() {
-        return "codes";
+        return "";
     }
 }
