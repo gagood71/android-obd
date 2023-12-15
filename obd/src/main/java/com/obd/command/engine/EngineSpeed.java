@@ -65,13 +65,6 @@ public class EngineSpeed extends Command<SpeedCommand> {
                                     obdResponse.getUnit()
                             )
                     );
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };

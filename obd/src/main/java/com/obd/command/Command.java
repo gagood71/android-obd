@@ -37,7 +37,7 @@ public abstract class Command<T extends ObdCommand> {
         } catch (Exception e) {
             e.printStackTrace();
 
-            listener.onFailed("", getUnit());
+            listener.onFailed(e.getMessage(), getUnit());
         }
     }
 

@@ -65,13 +65,6 @@ public class ControlDTC extends Command<DTCNumberCommand> {
                                     obdResponse.getUnit()
                             )
                     );
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };

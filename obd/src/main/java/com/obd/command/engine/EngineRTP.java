@@ -66,13 +66,6 @@ public class EngineRTP extends Command<RelativeThrottlePositionCommand> {
                                     obdResponse.getUnit()
                             )
                     );
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };

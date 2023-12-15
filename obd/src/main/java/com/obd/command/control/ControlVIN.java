@@ -65,13 +65,6 @@ public class ControlVIN extends Command<VINCommand> {
                                     obdResponse.getUnit()
                             )
                     );
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };

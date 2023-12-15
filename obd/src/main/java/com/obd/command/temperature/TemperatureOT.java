@@ -66,13 +66,6 @@ public class TemperatureOT extends Command<OilTemperatureCommand> {
                                     obdResponse.getUnit()
                             )
                     );
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };

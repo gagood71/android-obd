@@ -75,13 +75,6 @@ public class ControlPTC extends Command<PendingTroubleCodesCommand> {
                                 obdResponse.getUnit()
                         );
                     });
-                } else {
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onFailed(
-                                    o.toString(),
-                                    obdCommand.getDefaultUnit()
-                            )
-                    );
                 }
             }
         };
