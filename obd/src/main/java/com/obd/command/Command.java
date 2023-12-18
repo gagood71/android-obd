@@ -15,40 +15,22 @@ public abstract class Command<T extends ObdCommand> {
     protected static final boolean USE_CACHE = true;
 
     protected T obdCommand;
+    protected ObdDeviceConnection connection;
     protected Continuation<ObdResponse> continuation;
+
+    protected String commandType;
 
     public Command(CommandListener listener) {
         this(ELTONVS, listener);
     }
 
     protected Command(String type, CommandListener listener) {
-        try {
-            if (type.equals(DEFAULT)) {
-                new Thread(getRunnable(listener)).start();
-            } else if (type.equals(ELTONVS)) {
-                obdCommand = getCommand();
+        commandType = type;
 
-                ObdDeviceConnection connection = new ObdDeviceConnection(
-                        CommandCache.BLUETOOTH_SOCKET.getInputStream(),
-                        CommandCache.BLUETOOTH_SOCKET.getOutputStream());
-
-                new Thread(getRunnable(connection, listener)).start();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            listener.onFailed(e.getMessage(), getUnit());
-        }
+        new Thread(getRunnable(listener)).start();
     }
 
     protected abstract Runnable getRunnable(CommandListener listener);
-
-    protected abstract Runnable getRunnable(ObdDeviceConnection connection,
-                                            CommandListener listener);
-
-    protected abstract T getCommand();
-
-    protected abstract Continuation<ObdResponse> getContinuation(CommandListener listener);
 
     protected abstract String getUnit();
 }

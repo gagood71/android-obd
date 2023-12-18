@@ -2,7 +2,6 @@ package com.obd.command.engine;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +11,8 @@ import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.Command;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
+
+import java.io.IOException;
 
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
@@ -25,70 +26,43 @@ public class EngineRPM extends Command<RPMCommand> {
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            byte[] buffer = new byte[1024];
+            if (commandType.equals(ELTONVS)) {
+                obdCommand = new RPMCommand();
 
-            int bytes;
-
-            while (true) {
                 try {
-                    bytes = CommandCache.BLUETOOTH_SOCKET.getInputStream().read(buffer);
+                    connection = new ObdDeviceConnection(
+                            CommandCache.BLUETOOTH_SOCKET.getInputStream(),
+                            CommandCache.BLUETOOTH_SOCKET.getOutputStream());
 
-                    String data = new String(buffer, 0, bytes);
+                    ObdResponse obdResponse = (ObdResponse) connection.run(
+                            obdCommand,
+                            USE_CACHE,
+                            0,
+                            MAX_RETRIES,
+                            new Continuation<ObdResponse>() {
+                                @NonNull
+                                @Override
+                                public CoroutineContext getContext() {
+                                    return EmptyCoroutineContext.INSTANCE;
+                                }
 
-                    if (data.contains("RPM")) {
-                        listener.onSuccess(
-                                data.split(":")[1].trim(),
-                                getUnit()
+                                @Override
+                                public void resumeWith(@NonNull Object o) {
+                                }
+                            }
+                    );
+
+                    if (obdResponse != null) {
+                        new Handler(Looper.getMainLooper()).post(() ->
+                                listener.onSuccess(
+                                        obdResponse.getRawResponse().getValue(),
+                                        obdResponse.getUnit()
+                                )
                         );
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                    listener.onFailed("NULL", getUnit());
-                    break;
-                }
-            }
-        };
-    }
-
-    @Override
-    protected Runnable getRunnable(ObdDeviceConnection connection,
-                                   CommandListener listener) {
-        return () -> connection.run(
-                obdCommand,
-                USE_CACHE,
-                0,
-                MAX_RETRIES,
-                getContinuation(listener)
-        );
-    }
-
-    @Override
-    protected RPMCommand getCommand() {
-        return new RPMCommand();
-    }
-
-    @Override
-    protected Continuation<ObdResponse> getContinuation(CommandListener listener) {
-        return new Continuation<ObdResponse>() {
-            @NonNull
-            @Override
-            public CoroutineContext getContext() {
-                return EmptyCoroutineContext.INSTANCE;
-            }
-
-            @Override
-            public void resumeWith(@NonNull Object o) {
-                Log.e(getClass().getName(), o.toString());
-
-                if (o instanceof ObdResponse) {
-                    ObdResponse obdResponse = (ObdResponse) o;
-
+                } catch (IOException e) {
                     new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onSuccess(
-                                    obdResponse.getRawResponse().getValue(),
-                                    obdResponse.getUnit()
-                            )
+                            listener.onFailed(e.getMessage(), getUnit())
                     );
                 }
             }
