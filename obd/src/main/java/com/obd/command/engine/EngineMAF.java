@@ -2,25 +2,25 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsRPMCommand;
-import com.obd.pires.engine.PiresRPMCommand;
+import com.obd.eltonvs.engine.EltonvsMAFCommand;
+import com.obd.pires.engine.PiresMAFCommand;
 
-public class EngineRPM extends Command {
-    public EngineRPM(CommandListener listener) {
-        super(PIRES, listener);
+public class EngineMAF extends Command {
+    public EngineMAF(CommandListener listener) {
+        super(listener);
     }
 
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsRPMCommand(listener);
+            new EltonvsMAFCommand(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresRPMCommand(listener);
+            new PiresMAFCommand(listener);
         }
     }
 
     @Override
     protected String getUnit() {
-        return "RPM";
+        return "g/s";
     }
 }
