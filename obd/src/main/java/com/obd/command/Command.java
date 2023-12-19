@@ -1,23 +1,104 @@
 package com.obd.command;
 
-public abstract class Command {
-    public static final String DEFAULT = "DEFAULT";
-    public static final String ELTONVS = "ELTONVS";
-    public static final String PIRES = "PIRES";
+import android.os.Handler;
+import android.os.Looper;
 
-    protected String commandType;
+import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.commands.control.DtcNumberCommand;
+import com.github.pires.obd.commands.control.PendingTroubleCodesCommand;
+import com.github.pires.obd.commands.control.VinCommand;
+import com.github.pires.obd.commands.engine.OilTempCommand;
+import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
+import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
+import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
+import com.obd.command.engine.AbsoluteLoad;
+import com.obd.command.engine.MassAirFlow;
+import com.obd.command.engine.RPM;
+import com.obd.command.engine.Speed;
+import com.obd.command.engine.ThrottlePosition;
 
-    public Command(CommandListener listener) {
-        this(PIRES, listener);
+public class Command {
+    public static final String ABSOLUTE_LOAD = "ABSOLUTE_LOAD";
+    public static final String AIR_INTAKE_TEMPERATURE = "AIR_INTAKE_TEMPERATURE";
+    public static final String AMBIENT_AIR_TEMPERATURE = "AMBIENT_AIR_TEMPERATURE";
+    public static final String DTC = "DTC";
+    public static final String ENGINE_COOLANT_TEMPERATURE = "ENGINE_COOLANT_TEMPERATURE";
+    public static final String ENGINE_OIL_TEMPERATURE = "ENGINE_OIL_TEMPERATURE";
+    public static final String ENGINE_RPM = "ENGINE_RPM";
+    public static final String MASS_AIR_FLOW = "MASS_AIR_FLOW";
+    public static final String PENDING_TROUBLE_CODES = "PENDING_TROUBLE_CODES";
+    public static final String SPEED = "SPEED";
+    public static final String THROTTLE_POSITION = "THROTTLE_POSITION";
+    public static final String VIN = "VIN";
+
+    public static void run(String type, CommandListener listener) {
+        ObdCommand obdCommand;
+
+        switch (type) {
+            case ABSOLUTE_LOAD:
+                obdCommand = new AbsoluteLoad();
+                break;
+            case AIR_INTAKE_TEMPERATURE:
+                obdCommand = new AirIntakeTemperatureCommand();
+                break;
+            case AMBIENT_AIR_TEMPERATURE:
+                obdCommand = new AmbientAirTemperatureCommand();
+                break;
+            case DTC:
+                obdCommand = new DtcNumberCommand();
+                break;
+            case ENGINE_COOLANT_TEMPERATURE:
+                obdCommand = new EngineCoolantTemperatureCommand();
+                break;
+            case ENGINE_OIL_TEMPERATURE:
+                obdCommand = new OilTempCommand();
+                break;
+            case ENGINE_RPM:
+                obdCommand = new RPM();
+                break;
+            case MASS_AIR_FLOW:
+                obdCommand = new MassAirFlow();
+                break;
+            case PENDING_TROUBLE_CODES:
+                obdCommand = new PendingTroubleCodesCommand();
+                break;
+            case SPEED:
+                obdCommand = new Speed();
+                break;
+            case THROTTLE_POSITION:
+                obdCommand = new ThrottlePosition();
+                break;
+            case VIN:
+                obdCommand = new VinCommand();
+                break;
+            default:
+                obdCommand = null;
+                break;
+        }
+
+        if (obdCommand != null) {
+            new Thread(() -> {
+                try {
+                    obdCommand.run(CommandCache.BLUETOOTH_SOCKET.getInputStream(),
+                            CommandCache.BLUETOOTH_SOCKET.getOutputStream());
+
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            listener.onSuccess(
+                                    obdCommand.getCalculatedResult(),
+                                    obdCommand.getResultUnit()
+                            )
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            listener.onSuccess(
+                                    e.getMessage(),
+                                    obdCommand.getResultUnit()
+                            )
+                    );
+                }
+            }).start();
+        }
     }
-
-    protected Command(String type, CommandListener listener) {
-        commandType = type;
-
-        run(listener);
-    }
-
-    protected abstract void run(CommandListener listener);
-
-    protected abstract String getUnit();
 }
