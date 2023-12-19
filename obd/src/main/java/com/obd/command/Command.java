@@ -32,73 +32,77 @@ public class Command {
     public static final String VIN = "VIN";
 
     public static void run(String type, CommandListener listener) {
-        ObdCommand obdCommand;
+        new Thread(() -> {
+            ObdCommand obdCommand = null;
 
-        switch (type) {
-            case ABSOLUTE_LOAD:
-                obdCommand = new AbsoluteLoad();
-                break;
-            case AIR_INTAKE_TEMPERATURE:
-                obdCommand = new AirIntakeTemperatureCommand();
-                break;
-            case AMBIENT_AIR_TEMPERATURE:
-                obdCommand = new AmbientAirTemperatureCommand();
-                break;
-            case DTC:
-                obdCommand = new DtcNumberCommand();
-                break;
-            case ENGINE_COOLANT_TEMPERATURE:
-                obdCommand = new EngineCoolantTemperatureCommand();
-                break;
-            case ENGINE_OIL_TEMPERATURE:
-                obdCommand = new OilTempCommand();
-                break;
-            case ENGINE_RPM:
-                obdCommand = new RPM();
-                break;
-            case MASS_AIR_FLOW:
-                obdCommand = new MassAirFlow();
-                break;
-            case PENDING_TROUBLE_CODES:
-                obdCommand = new PendingTroubleCodesCommand();
-                break;
-            case SPEED:
-                obdCommand = new Speed();
-                break;
-            case THROTTLE_POSITION:
-                obdCommand = new ThrottlePosition();
-                break;
-            case VIN:
-                obdCommand = new VinCommand();
-                break;
-            default:
-                obdCommand = null;
-                break;
-        }
+            switch (type) {
+                case ABSOLUTE_LOAD:
+                    obdCommand = new AbsoluteLoad();
+                    break;
+                case AIR_INTAKE_TEMPERATURE:
+                    obdCommand = new AirIntakeTemperatureCommand();
+                    break;
+                case AMBIENT_AIR_TEMPERATURE:
+                    obdCommand = new AmbientAirTemperatureCommand();
+                    break;
+                case DTC:
+                    obdCommand = new DtcNumberCommand();
+                    break;
+                case ENGINE_COOLANT_TEMPERATURE:
+                    obdCommand = new EngineCoolantTemperatureCommand();
+                    break;
+                case ENGINE_OIL_TEMPERATURE:
+                    obdCommand = new OilTempCommand();
+                    break;
+                case ENGINE_RPM:
+                    obdCommand = new RPM();
+                    break;
+                case MASS_AIR_FLOW:
+                    obdCommand = new MassAirFlow();
+                    break;
+                case PENDING_TROUBLE_CODES:
+                    obdCommand = new PendingTroubleCodesCommand();
+                    break;
+                case SPEED:
+                    obdCommand = new Speed();
+                    break;
+                case THROTTLE_POSITION:
+                    obdCommand = new ThrottlePosition();
+                    break;
+                case VIN:
+                    obdCommand = new VinCommand();
+                    break;
+            }
 
-        if (obdCommand != null) {
-            new Thread(() -> {
+            if (obdCommand != null) {
+                ObdCommand command = obdCommand;
+
                 try {
-                    obdCommand.run(CommandCache.BLUETOOTH_SOCKET.getInputStream(),
+                    obdCommand.run(
+                            CommandCache.BLUETOOTH_SOCKET.getInputStream(),
                             CommandCache.BLUETOOTH_SOCKET.getOutputStream());
 
                     new Handler(Looper.getMainLooper()).post(() ->
                             listener.onSuccess(
-                                    obdCommand.getCalculatedResult(),
-                                    obdCommand.getResultUnit()
-                            )
+                                    command.getCalculatedResult(),
+                                    command.getResultUnit())
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
 
                     new Handler(Looper.getMainLooper()).post(() ->
-                            listener.onSuccess(
+                            listener.onFailed(
                                     e.getMessage(),
-                                    obdCommand.getResultUnit()
-                            )
+                                    command.getResultUnit())
                     );
                 }
-            }).start();
-        }
+            } else {
+                new Handler(Looper.getMainLooper()).post(() ->
+                        listener.onFailed(
+                                "NULL",
+                                "NULL")
+                );
+            }
+        }).start();
     }
 }
