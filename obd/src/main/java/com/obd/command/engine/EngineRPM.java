@@ -2,8 +2,8 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsRPMCommand;
-import com.obd.pires.engine.PiresRPMCommand;
+import com.obd.eltonvs.engine.EltonvsRPM;
+import com.obd.pires.engine.PiresRPM;
 
 public class EngineRPM extends Command {
     public EngineRPM(CommandListener listener) {
@@ -13,9 +13,9 @@ public class EngineRPM extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsRPMCommand(listener);
+            new EltonvsRPM(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresRPMCommand(listener);
+            new PiresRPM(listener);
         }
     }
 

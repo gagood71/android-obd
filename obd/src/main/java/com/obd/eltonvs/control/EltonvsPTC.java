@@ -3,8 +3,6 @@ package com.obd.eltonvs.control;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import com.github.eltonvs.obd.command.ObdResponse;
 import com.github.eltonvs.obd.command.control.PendingTroubleCodesCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
@@ -12,12 +10,8 @@ import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.eltonvs.Command;
 
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
-
-public class EltonvsPTCCommand extends Command<PendingTroubleCodesCommand> {
-    public EltonvsPTCCommand(CommandListener listener) {
+public class EltonvsPTC extends Command<PendingTroubleCodesCommand> {
+    public EltonvsPTC(CommandListener listener) {
         super(listener);
     }
 
@@ -36,17 +30,7 @@ public class EltonvsPTCCommand extends Command<PendingTroubleCodesCommand> {
                         USE_CACHE,
                         0,
                         MAX_RETRIES,
-                        new Continuation<ObdResponse>() {
-                            @NonNull
-                            @Override
-                            public CoroutineContext getContext() {
-                                return EmptyCoroutineContext.INSTANCE;
-                            }
-
-                            @Override
-                            public void resumeWith(@NonNull Object o) {
-                            }
-                        }
+                        continuation
                 );
 
                 if (obdResponse != null) {

@@ -1,31 +1,31 @@
-package com.obd.pires.temperature;
+package com.obd.pires.engine;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
+import com.github.pires.obd.commands.engine.MassAirFlowCommand;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.pires.Command;
 
-public class PiresECTCommand extends Command<EngineCoolantTemperatureCommand> {
-    public PiresECTCommand(CommandListener listener) {
+public class PiresMAF extends Command<MassAirFlowCommand> {
+    public PiresMAF(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            EngineCoolantTemperatureCommand command = new EngineCoolantTemperatureCommand();
+            obdCommand = new MassAirFlowCommand();
 
             try {
-                command.run(
+                obdCommand.run(
                         CommandCache.BLUETOOTH_SOCKET.getInputStream(),
                         CommandCache.BLUETOOTH_SOCKET.getOutputStream());
 
                 new Handler(Looper.getMainLooper()).post(() ->
                         listener.onSuccess(
-                                command.getResult(),
+                                obdCommand.getCalculatedResult(),
                                 getUnit()
                         )
                 );

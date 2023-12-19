@@ -2,8 +2,8 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsTPCommand;
-import com.obd.pires.engine.PiresTPCommand;
+import com.obd.eltonvs.engine.EltonvsTP;
+import com.obd.pires.engine.PiresTP;
 
 public class EngineTP extends Command {
     public EngineTP(CommandListener listener) {
@@ -13,9 +13,9 @@ public class EngineTP extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsTPCommand(listener);
+            new EltonvsTP(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresTPCommand(listener);
+            new PiresTP(listener);
         }
     }
 

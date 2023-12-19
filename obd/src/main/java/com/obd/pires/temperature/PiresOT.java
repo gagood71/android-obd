@@ -8,24 +8,24 @@ import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.pires.Command;
 
-public class PiresOTCommand extends Command<OilTempCommand> {
-    public PiresOTCommand(CommandListener listener) {
+public class PiresOT extends Command<OilTempCommand> {
+    public PiresOT(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            OilTempCommand command = new OilTempCommand();
+            obdCommand = new OilTempCommand();
 
             try {
-                command.run(
+                obdCommand.run(
                         CommandCache.BLUETOOTH_SOCKET.getInputStream(),
                         CommandCache.BLUETOOTH_SOCKET.getOutputStream());
 
                 new Handler(Looper.getMainLooper()).post(() ->
                         listener.onSuccess(
-                                command.getResult(),
+                                obdCommand.getCalculatedResult(),
                                 getUnit()
                         )
                 );

@@ -1,30 +1,24 @@
-package com.obd.eltonvs.control;
+package com.obd.eltonvs.engine;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.control.ResetTroubleCodesCommand;
+import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.eltonvs.Command;
 
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
-
-public class EltonvsRTCCommand extends Command<ResetTroubleCodesCommand> {
-    public EltonvsRTCCommand(CommandListener listener) {
+public class EltonvsTP extends Command<ThrottlePositionCommand> {
+    public EltonvsTP(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            obdCommand = new ResetTroubleCodesCommand();
+            obdCommand = new ThrottlePositionCommand();
 
             try {
                 connection = new ObdDeviceConnection(
@@ -36,24 +30,14 @@ public class EltonvsRTCCommand extends Command<ResetTroubleCodesCommand> {
                         USE_CACHE,
                         0,
                         MAX_RETRIES,
-                        new Continuation<ObdResponse>() {
-                            @NonNull
-                            @Override
-                            public CoroutineContext getContext() {
-                                return EmptyCoroutineContext.INSTANCE;
-                            }
-
-                            @Override
-                            public void resumeWith(@NonNull Object o) {
-                            }
-                        }
+                        continuation
                 );
 
                 if (obdResponse != null) {
                     new Handler(Looper.getMainLooper()).post(() ->
                             listener.onSuccess(
                                     obdResponse.getRawResponse().getValue(),
-                                    obdResponse.getUnit()
+                                    getUnit()
                             )
                     );
                 }

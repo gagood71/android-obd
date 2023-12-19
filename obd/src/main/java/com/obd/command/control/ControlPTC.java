@@ -2,7 +2,7 @@ package com.obd.command.control;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.control.EltonvsPTCCommand;
+import com.obd.eltonvs.control.EltonvsPTC;
 
 public class ControlPTC extends Command {
     public ControlPTC(CommandListener listener) {
@@ -12,7 +12,7 @@ public class ControlPTC extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsPTCCommand(listener);
+            new EltonvsPTC(listener);
         }
     }
 

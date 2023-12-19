@@ -2,8 +2,8 @@ package com.obd.command.temperature;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.temperature.EltonvsAATCommand;
-import com.obd.pires.temperature.PiresAATCommand;
+import com.obd.eltonvs.temperature.EltonvsAAT;
+import com.obd.pires.temperature.PiresAAT;
 
 public class TemperatureAAT extends Command {
     public TemperatureAAT(CommandListener listener) {
@@ -13,9 +13,9 @@ public class TemperatureAAT extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsAATCommand(listener);
+            new EltonvsAAT(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresAATCommand(listener);
+            new PiresAAT(listener);
         }
     }
 

@@ -1,30 +1,24 @@
-package com.obd.eltonvs.engine;
+package com.obd.eltonvs.temperature;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.engine.MassAirFlowCommand;
+import com.github.eltonvs.obd.command.temperature.AirIntakeTemperatureCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.eltonvs.Command;
 
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
-
-public class EltonvsMAFCommand extends Command<MassAirFlowCommand> {
-    public EltonvsMAFCommand(CommandListener listener) {
+public class EltonvsAT extends Command<AirIntakeTemperatureCommand> {
+    public EltonvsAT(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            obdCommand = new MassAirFlowCommand();
+            obdCommand = new AirIntakeTemperatureCommand();
 
             try {
                 connection = new ObdDeviceConnection(
@@ -36,17 +30,7 @@ public class EltonvsMAFCommand extends Command<MassAirFlowCommand> {
                         USE_CACHE,
                         0,
                         MAX_RETRIES,
-                        new Continuation<ObdResponse>() {
-                            @NonNull
-                            @Override
-                            public CoroutineContext getContext() {
-                                return EmptyCoroutineContext.INSTANCE;
-                            }
-
-                            @Override
-                            public void resumeWith(@NonNull Object o) {
-                            }
-                        }
+                        continuation
                 );
 
                 if (obdResponse != null) {

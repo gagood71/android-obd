@@ -2,8 +2,8 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsALCommand;
-import com.obd.pires.engine.PiresALCommand;
+import com.obd.eltonvs.engine.EltonvsAL;
+import com.obd.pires.engine.PiresAL;
 
 public class EngineAL extends Command {
     public EngineAL(CommandListener listener) {
@@ -13,9 +13,9 @@ public class EngineAL extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsALCommand(listener);
+            new EltonvsAL(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresALCommand(listener);
+            new PiresAL(listener);
         }
     }
 

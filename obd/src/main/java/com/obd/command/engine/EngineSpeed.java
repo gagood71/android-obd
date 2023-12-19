@@ -2,8 +2,8 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsSpeedCommand;
-import com.obd.pires.engine.PiresSpeedCommand;
+import com.obd.eltonvs.engine.EltonvsSpeed;
+import com.obd.pires.engine.PiresSpeed;
 
 public class EngineSpeed extends Command {
     public EngineSpeed(CommandListener listener) {
@@ -13,9 +13,9 @@ public class EngineSpeed extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsSpeedCommand(listener);
+            new EltonvsSpeed(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresSpeedCommand(listener);
+            new PiresSpeed(listener);
         }
     }
 

@@ -3,29 +3,29 @@ package com.obd.pires.engine;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.pires.Command;
 
-public class PiresSpeedCommand extends Command<SpeedCommand> {
-    public PiresSpeedCommand(CommandListener listener) {
+public class PiresTP extends Command<ThrottlePositionCommand> {
+    public PiresTP(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            SpeedCommand command = new SpeedCommand();
+            obdCommand = new ThrottlePositionCommand();
 
             try {
-                command.run(
+                obdCommand.run(
                         CommandCache.BLUETOOTH_SOCKET.getInputStream(),
                         CommandCache.BLUETOOTH_SOCKET.getOutputStream());
 
                 new Handler(Looper.getMainLooper()).post(() ->
                         listener.onSuccess(
-                                command.getResult(),
+                                obdCommand.getCalculatedResult(),
                                 getUnit()
                         )
                 );

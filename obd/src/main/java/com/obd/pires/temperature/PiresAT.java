@@ -1,21 +1,23 @@
-package com.obd.pires.engine;
+package com.obd.pires.temperature;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import com.github.pires.obd.commands.engine.ThrottlePositionCommand;
+import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.pires.Command;
 
-public class PiresTPCommand extends Command<ThrottlePositionCommand> {
-    public PiresTPCommand(CommandListener listener) {
+public class PiresAT extends Command<AirIntakeTemperatureCommand> {
+    public PiresAT(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
+            obdCommand = new AirIntakeTemperatureCommand();
+
             try {
                 obdCommand.run(
                         CommandCache.BLUETOOTH_SOCKET.getInputStream(),
@@ -23,7 +25,7 @@ public class PiresTPCommand extends Command<ThrottlePositionCommand> {
 
                 new Handler(Looper.getMainLooper()).post(() ->
                         listener.onSuccess(
-                                obdCommand.getResult(),
+                                obdCommand.getCalculatedResult(),
                                 getUnit()
                         )
                 );

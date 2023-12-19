@@ -2,7 +2,7 @@ package com.obd.command.control;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.control.EltonvsDTCCommand;
+import com.obd.eltonvs.control.EltonvsDTC;
 
 public class ControlDTC extends Command {
     public ControlDTC(CommandListener listener) {
@@ -12,7 +12,7 @@ public class ControlDTC extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsDTCCommand(listener);
+            new EltonvsDTC(listener);
         }
     }
 

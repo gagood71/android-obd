@@ -2,8 +2,8 @@ package com.obd.command.engine;
 
 import com.obd.command.Command;
 import com.obd.command.CommandListener;
-import com.obd.eltonvs.engine.EltonvsMAFCommand;
-import com.obd.pires.engine.PiresMAFCommand;
+import com.obd.eltonvs.engine.EltonvsMAF;
+import com.obd.pires.engine.PiresMAF;
 
 public class EngineMAF extends Command {
     public EngineMAF(CommandListener listener) {
@@ -13,9 +13,9 @@ public class EngineMAF extends Command {
     @Override
     protected void run(CommandListener listener) {
         if (commandType.equals(ELTONVS)) {
-            new EltonvsMAFCommand(listener);
+            new EltonvsMAF(listener);
         } else if (commandType.equals(PIRES)) {
-            new PiresMAFCommand(listener);
+            new PiresMAF(listener);
         }
     }
 

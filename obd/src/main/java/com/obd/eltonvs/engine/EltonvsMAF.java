@@ -3,28 +3,22 @@ package com.obd.eltonvs.engine;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.NonNull;
-
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand;
+import com.github.eltonvs.obd.command.engine.MassAirFlowCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 import com.obd.command.CommandCache;
 import com.obd.command.CommandListener;
 import com.obd.eltonvs.Command;
 
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
-
-public class EltonvsTPCommand extends Command<ThrottlePositionCommand> {
-    public EltonvsTPCommand(CommandListener listener) {
+public class EltonvsMAF extends Command<MassAirFlowCommand> {
+    public EltonvsMAF(CommandListener listener) {
         super(listener);
     }
 
     @Override
     protected Runnable getRunnable(CommandListener listener) {
         return () -> {
-            obdCommand = new ThrottlePositionCommand();
+            obdCommand = new MassAirFlowCommand();
 
             try {
                 connection = new ObdDeviceConnection(
@@ -36,17 +30,7 @@ public class EltonvsTPCommand extends Command<ThrottlePositionCommand> {
                         USE_CACHE,
                         0,
                         MAX_RETRIES,
-                        new Continuation<ObdResponse>() {
-                            @NonNull
-                            @Override
-                            public CoroutineContext getContext() {
-                                return EmptyCoroutineContext.INSTANCE;
-                            }
-
-                            @Override
-                            public void resumeWith(@NonNull Object o) {
-                            }
-                        }
+                        continuation
                 );
 
                 if (obdResponse != null) {
