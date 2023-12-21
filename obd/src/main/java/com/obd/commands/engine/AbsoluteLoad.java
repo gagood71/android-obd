@@ -1,4 +1,4 @@
-package com.obd.command.engine;
+package com.obd.commands.engine;
 
 import com.github.pires.obd.commands.engine.AbsoluteLoadCommand;
 

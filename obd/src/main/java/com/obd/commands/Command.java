@@ -1,36 +1,22 @@
-package com.obd.command;
+package com.obd.commands;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.github.pires.obd.commands.ObdCommand;
-import com.github.pires.obd.commands.control.DtcNumberCommand;
-import com.github.pires.obd.commands.control.PendingTroubleCodesCommand;
-import com.github.pires.obd.commands.control.VinCommand;
 import com.github.pires.obd.commands.engine.OilTempCommand;
 import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
 import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
 import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
-import com.obd.command.engine.AbsoluteLoad;
-import com.obd.command.engine.MassAirFlow;
-import com.obd.command.engine.RPM;
-import com.obd.command.engine.Speed;
-import com.obd.command.engine.ThrottlePosition;
+import com.obd.commands.control.ControlCommand;
+import com.obd.commands.engine.EngineCommand;
 
 public class Command {
-    public static final String ABSOLUTE_LOAD = "ABSOLUTE_LOAD";
     public static final String AIR_INTAKE_TEMPERATURE = "AIR_INTAKE_TEMPERATURE";
     public static final String AMBIENT_AIR_TEMPERATURE = "AMBIENT_AIR_TEMPERATURE";
-    public static final String DTC = "DTC";
     public static final String ENGINE_COOLANT_TEMPERATURE = "ENGINE_COOLANT_TEMPERATURE";
     public static final String ENGINE_OIL_TEMPERATURE = "ENGINE_OIL_TEMPERATURE";
-    public static final String ENGINE_RPM = "ENGINE_RPM";
-    public static final String MASS_AIR_FLOW = "MASS_AIR_FLOW";
-    public static final String PENDING_TROUBLE_CODES = "PENDING_TROUBLE_CODES";
-    public static final String SPEED = "SPEED";
-    public static final String THROTTLE_POSITION = "THROTTLE_POSITION";
-    public static final String VIN = "VIN";
 
     private static BluetoothSocket BLUETOOTH_SOCKET;
 
@@ -41,8 +27,17 @@ public class Command {
             ObdCommand obdCommand = null;
 
             switch (type) {
-                case ABSOLUTE_LOAD:
-                    obdCommand = new AbsoluteLoad();
+                case ControlCommand.CONTROL_DTC:
+                case ControlCommand.CONTROL_PENDING_TROUBLE_CODES:
+                case ControlCommand.CONTROL_VIN:
+                    obdCommand = new ControlCommand().getCommand(type);
+                    break;
+                case EngineCommand.ENGINE_ABSOLUTE_LOAD:
+                case EngineCommand.ENGINE_MASS_AIR_FLOW:
+                case EngineCommand.ENGINE_RPM:
+                case EngineCommand.ENGINE_SPEED:
+                case EngineCommand.ENGINE_THROTTLE_POSITION:
+                    obdCommand = new EngineCommand().getCommand(type);
                     break;
                 case AIR_INTAKE_TEMPERATURE:
                     obdCommand = new AirIntakeTemperatureCommand();
@@ -50,32 +45,11 @@ public class Command {
                 case AMBIENT_AIR_TEMPERATURE:
                     obdCommand = new AmbientAirTemperatureCommand();
                     break;
-                case DTC:
-                    obdCommand = new DtcNumberCommand();
-                    break;
                 case ENGINE_COOLANT_TEMPERATURE:
                     obdCommand = new EngineCoolantTemperatureCommand();
                     break;
                 case ENGINE_OIL_TEMPERATURE:
                     obdCommand = new OilTempCommand();
-                    break;
-                case ENGINE_RPM:
-                    obdCommand = new RPM();
-                    break;
-                case MASS_AIR_FLOW:
-                    obdCommand = new MassAirFlow();
-                    break;
-                case PENDING_TROUBLE_CODES:
-                    obdCommand = new PendingTroubleCodesCommand();
-                    break;
-                case SPEED:
-                    obdCommand = new Speed();
-                    break;
-                case THROTTLE_POSITION:
-                    obdCommand = new ThrottlePosition();
-                    break;
-                case VIN:
-                    obdCommand = new VinCommand();
                     break;
             }
 
@@ -119,7 +93,7 @@ public class Command {
         ECU_BIT = ecuBit;
     }
 
-    public static boolean is8Bit() {
+    public static boolean isEightBit() {
         return ECU_BIT == 8;
     }
 }

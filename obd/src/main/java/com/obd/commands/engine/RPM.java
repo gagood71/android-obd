@@ -1,9 +1,9 @@
-package com.obd.command.engine;
+package com.obd.commands.engine;
 
 import android.annotation.SuppressLint;
 
 import com.github.pires.obd.commands.engine.RPMCommand;
-import com.obd.command.Command;
+import com.obd.commands.Command;
 
 public class RPM extends RPMCommand {
     protected int value;
@@ -16,7 +16,7 @@ public class RPM extends RPMCommand {
 
     @Override
     protected void performCalculations() {
-        if (!Command.is8Bit()) {
+        if (Command.isEightBit()) {
             value = (buffer.get(2) + buffer.get(3)) / 4;
         } else {
             value = (buffer.get(2) * 256 + buffer.get(3)) / 4;

@@ -1,4 +1,4 @@
-package com.obd.command;
+package com.obd.commands;
 
 public interface CommandListener {
     void onSuccess(String value, String unit);
