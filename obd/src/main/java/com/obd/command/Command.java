@@ -1,5 +1,6 @@
 package com.obd.command;
 
+import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -30,6 +31,10 @@ public class Command {
     public static final String SPEED = "SPEED";
     public static final String THROTTLE_POSITION = "THROTTLE_POSITION";
     public static final String VIN = "VIN";
+
+    private static BluetoothSocket BLUETOOTH_SOCKET;
+
+    private static int ECU_BIT = 8;
 
     public static void run(String type, CommandListener listener) {
         new Thread(() -> {
@@ -79,8 +84,8 @@ public class Command {
 
                 try {
                     obdCommand.run(
-                            CommandCache.BLUETOOTH_SOCKET.getInputStream(),
-                            CommandCache.BLUETOOTH_SOCKET.getOutputStream());
+                            BLUETOOTH_SOCKET.getInputStream(),
+                            BLUETOOTH_SOCKET.getOutputStream());
 
                     new Handler(Looper.getMainLooper()).post(() ->
                             listener.onSuccess(
@@ -104,5 +109,17 @@ public class Command {
                 );
             }
         }).start();
+    }
+
+    public static void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
+        BLUETOOTH_SOCKET = bluetoothSocket;
+    }
+
+    public static void setEcuBit(int ecuBit) {
+        ECU_BIT = ecuBit;
+    }
+
+    public static boolean is8Bit() {
+        return ECU_BIT == 8;
     }
 }

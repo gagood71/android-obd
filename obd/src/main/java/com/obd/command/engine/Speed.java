@@ -1,7 +1,7 @@
 package com.obd.command.engine;
 
 import com.github.pires.obd.commands.SpeedCommand;
-import com.obd.command.CommandCache;
+import com.obd.command.Command;
 
 public class Speed extends SpeedCommand {
     protected int value;
@@ -14,7 +14,7 @@ public class Speed extends SpeedCommand {
 
     @Override
     protected void performCalculations() {
-        if (CommandCache.ECU_BIT == CommandCache.ECU_16_BIT) {
+        if (!Command.is8Bit()) {
             value = (buffer.get(2) << 8) | buffer.get(3);
         } else {
             value = buffer.get(2);

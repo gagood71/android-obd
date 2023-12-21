@@ -3,20 +3,20 @@ package com.obd.command.engine;
 import android.annotation.SuppressLint;
 
 import com.github.pires.obd.commands.engine.MassAirFlowCommand;
-import com.obd.command.CommandCache;
+import com.obd.command.Command;
 
 public class MassAirFlow extends MassAirFlowCommand {
-    protected float value = -1.0f;
+    protected float value;
 
     public MassAirFlow() {
         super();
 
-        value = 0;
+        value = -1.0f;
     }
 
     @Override
     protected void performCalculations() {
-        if (CommandCache.ECU_BIT == CommandCache.ECU_16_BIT) {
+        if (!Command.is8Bit()) {
             value = (buffer.get(2) * 256 + buffer.get(3)) / 100.0f;
         } else {
             value = (buffer.get(2) + buffer.get(3)) / 100.0f;
@@ -29,23 +29,17 @@ public class MassAirFlow extends MassAirFlowCommand {
         return String.format("%.2f%s", value, getResultUnit());
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getCalculatedResult() {
         return String.valueOf(value);
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getResultUnit() {
         return "g/s";
     }
 
-    /**
-     * <p>getMAF.</p>
-     *
-     * @return MAF value for further calculus.
-     */
+    @Override
     public double getMAF() {
         return value;
     }
