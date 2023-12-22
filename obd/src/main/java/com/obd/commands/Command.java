@@ -18,9 +18,12 @@ public class Command {
     public static final String ENGINE_COOLANT_TEMPERATURE = "ENGINE_COOLANT_TEMPERATURE";
     public static final String ENGINE_OIL_TEMPERATURE = "ENGINE_OIL_TEMPERATURE";
 
-    private static BluetoothSocket BLUETOOTH_SOCKET;
+    public static final int ECU_8_BIT = 8;
+    public static final int ECU_16_BIT = 16;
 
-    private static int ECU_BIT = 8;
+    public static BluetoothSocket BLUETOOTH_SOCKET;
+
+    public static int ECU_BIT = ECU_8_BIT;
 
     public static void run(String type, CommandListener listener) {
         new Thread(() -> {
@@ -83,14 +86,6 @@ public class Command {
                 );
             }
         }).start();
-    }
-
-    public static void setBluetoothSocket(BluetoothSocket bluetoothSocket) {
-        BLUETOOTH_SOCKET = bluetoothSocket;
-    }
-
-    public static void setEcuBit(int ecuBit) {
-        ECU_BIT = ecuBit;
     }
 
     public static boolean isEightBit() {
