@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ECU_狀態">ECU 狀態</string>
+    <string name="車輛狀態">車輛狀態</string>
+    <string name="異常狀態">異常狀態</string>
+
+    <string name="故障代碼">故障代碼</string>
+    <string name="故障代碼說明">以下是找到的故障代碼，您可以使用下方的清除按鈕來消除錯誤。</string>
+    <string name="故障代碼尋找">代碼尋找</string>
+    <string name="故障代碼消除">代碼消除</string>
+    <string name="故障代碼消除成功">消除成功</string>
+    <string name="故障代碼消除失敗">消除失敗</string>
+
+    <string name="錯誤代碼">錯誤代碼</string>
+    <string name="錯誤代碼說明">以下是找到的錯誤代碼，您可以使用下方的清除按鈕來消除錯誤。</string>
+    <string name="錯誤代碼尋找">代碼尋找</string>
+    <string name="錯誤代碼消除">代碼消除</string>
+    <string name="錯誤代碼消除成功">消除成功</string>
+    <string name="錯誤代碼消除失敗">消除失敗</string>
+
+    <string name="引擎">引擎</string>
+    <string name="引擎狀態">引擎狀態</string>
+    <string name="引擎附載">引擎附載</string>
+    <string name="空氣流量">空氣流量</string>
+    <string name="引擎轉速">引擎轉速</string>
+    <string name="車輛時速">車輛時速</string>
+    <string name="油門位置">油門位置</string>
+    <string name="相對油門位置">相對油門位置</string>
+
+    <string name="溫度">溫度</string>
+    <string name="溫度狀態">溫度狀態</string>
+    <string name="車內溫度">車內溫度</string>
+    <string name="進氣溫度">進氣溫度</string>
+    <string name="冷卻溫度">冷卻溫度</string>
+    <string name="機油溫度">機油溫度</string>
+
+    <string name="機油">機油</string>
+    <string name="機油油位">機油油位</string>
+</resources>
